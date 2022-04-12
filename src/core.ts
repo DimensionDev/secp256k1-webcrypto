@@ -6,14 +6,43 @@ import { exportK256, generateK256Pair, importK256 } from './ec/key.js'
 import { usageToFlag } from './key.js'
 import { deriveBitsK256 } from './ec/derive.js'
 
-export function createSubtle(
-    nativeSubtle: SubtleCrypto,
+export interface CryptoClasses {
+    Crypto: typeof Crypto
+    CryptoKey: typeof CryptoKey
+    SubtleCrypto: typeof SubtleCrypto
+}
+export function createCrypto(
+    nativeCrypto: globalThis.Crypto,
     nativeCryptoKey: typeof globalThis.CryptoKey | undefined,
     DOMException: typeof globalThis.DOMException,
-): readonly [typeof CryptoKey, SubtleCrypto] {
+): readonly [instance: Crypto, classes: CryptoClasses, polyfill: () => void] {
+    const [shimSubtle, SubtleCrypto, CryptoKey] = createSubtleClass(nativeCrypto, nativeCryptoKey, DOMException)
+    const [shimCrypto, Crypto] = createCryptoClass(nativeCrypto, shimSubtle)
+
+    function polyfill() {
+        Object.defineProperties(globalThis, {
+            // classes
+            Crypto: { value: Crypto, configurable: true, writable: true },
+            SubtleCrypto: { value: SubtleCrypto, configurable: true, writable: true },
+            CryptoKey: { value: CryptoKey, configurable: true, writable: true },
+            // instance
+            crypto: { value: crypto, configurable: true, writable: true },
+        })
+    }
+    return [shimCrypto, { Crypto, CryptoKey, SubtleCrypto }, polyfill]
+}
+function createSubtleClass(
+    nativeCrypto: globalThis.Crypto,
+    nativeCryptoKey: typeof globalThis.CryptoKey | undefined,
+    DOMException: typeof globalThis.DOMException,
+) {
+    const nativeSubtle = nativeCrypto.subtle
     const { get, has, ShimCryptoKey, newKey } = createMemory(nativeCryptoKey)
 
-    const shimSubtleCrypto: SubtleCrypto = {
+    function SubtleCrypto(): SubtleCrypto {
+        throw new TypeError('Illegal constructor')
+    }
+    const subtleCryptoPrototype: SubtleCrypto = {
         //#region Not Wrapping methods
         decrypt(algorithm, key, data) {
             return nativeSubtle.decrypt(algorithm, key, data)
@@ -137,5 +166,31 @@ export function createSubtle(
         },
         //#endregion
     }
-    return [ShimCryptoKey, shimSubtleCrypto] as const
+    Object.defineProperty(SubtleCrypto, 'prototype', { value: subtleCryptoPrototype })
+    Object.defineProperties(subtleCryptoPrototype, {
+        constructor: { value: SubtleCrypto, configurable: true, writable: true },
+        [Symbol.toStringTag]: { configurable: true, value: 'Crypto' },
+    })
+
+    return [Object.create(subtleCryptoPrototype) as SubtleCrypto, SubtleCrypto as any, ShimCryptoKey] as const
+}
+
+function createCryptoClass(nativeCrypto: Crypto, shimSubtle: SubtleCrypto) {
+    function Crypto(): Crypto {
+        throw new TypeError('Illegal constructor')
+    }
+    const cryptoPrototype: Crypto = {
+        get subtle() {
+            return shimSubtle
+        },
+        getRandomValues: (array) => nativeCrypto.getRandomValues(array),
+        randomUUID: () => nativeCrypto.randomUUID(),
+    }
+    Object.defineProperty(Crypto, 'prototype', { value: cryptoPrototype })
+    Object.defineProperty(Crypto.prototype, Symbol.toStringTag, {
+        configurable: true,
+        value: 'Crypto',
+    })
+
+    return [Object.create(Crypto) as Crypto, Crypto as any] as const
 }

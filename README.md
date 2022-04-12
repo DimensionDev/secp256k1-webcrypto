@@ -11,11 +11,16 @@ Thanks to `PeculiarVentures` for their webcrypto-liner!
 - Node: Have [native WebCrypto](https://nodejs.org/api/webcrypto.html#web-crypto-api) support.
 - Web: Have [native WebCrypro](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) support.
 
-You can create your own instance by `@dimensiondev/secp256k1-webcrypto`
+You can create your own instance by
 
 ```js
-import { createSubtle } from './core.js'
-export const [ShimCryptoKey, subtleCrypto] = createSubtle(yourWebCryptoSubtle, CryptoKeyClass, DOMExceptionClass)
+import { createCrypto } from '@dimensiondev/secp256k1-webcrypto/core'
+
+export const [crypto, { Crypto, CryptoKey, SubtleCrypto }, polyfill] = createCrypto(
+  globalThis.crypto,
+  globalThis.CryptoKey,
+  DOMException,
+)
 ```
 
 ## Unsupported
