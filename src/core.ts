@@ -26,7 +26,7 @@ export function createCrypto(
             SubtleCrypto: { value: SubtleCrypto, configurable: true, writable: true },
             CryptoKey: { value: CryptoKey, configurable: true, writable: true },
             // instance
-            crypto: { value: crypto, configurable: true, writable: true },
+            crypto: { value: shimCrypto, configurable: true, writable: true },
         })
     }
     return [shimCrypto, { Crypto, CryptoKey, SubtleCrypto }, polyfill]

@@ -7,7 +7,9 @@
   "types": "./dist/web.d.ts",
   "typesVersions": {
     "*": {
-      "core": ["./dist/core.d.ts"]
+      "core": ["./dist/core.d.ts"],
+      "web": ["./dist/web.d.ts"],
+      "node": ["./dist/node.d.ts"]
     }
   },
   "exports": {
@@ -15,6 +17,14 @@
       "types": "./dist/web.d.ts",
       "node": "./dist/node.js",
       "default": "./dist/web.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "default": "./dist/web.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "default": "./dist/node.js"
     },
     "./core": {
       "types": "./dist/core.d.ts",
