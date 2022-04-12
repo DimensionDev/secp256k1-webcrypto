@@ -14,4 +14,4 @@ jobs:
                   registry: true
             - run: pnpm install
             - run: pnpm run build
-            - run: ./publish.sh
+            - run: sh ./publish.sh
