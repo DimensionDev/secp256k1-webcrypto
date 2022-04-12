@@ -6,6 +6,7 @@
   "main": "dist/web.js",
   "exports": {
     ".": {
+      "types": "./dist/web.d.ts",
       "node": "./dist/node.js",
       "default": "./dist/web.js"
     },
@@ -38,5 +39,6 @@
   "dependencies": {
     "elliptic": "^6.5.4",
     "pvtsutils": "^1.2.2"
-  }
+  },
+  "files": ["dist", "package.json", "src"]
 }
