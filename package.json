@@ -3,14 +3,23 @@
   "packageManager": "pnpm@6.32.6",
   "version": "1.0.0",
   "description": "WebCrypto API with secp256k1 support",
-  "main": "dist/web.js",
+  "main": "./dist/web.js",
+  "types": "./dist/web.d.ts",
+  "typesVersions": {
+    "*": {
+      "core": ["./dist/core.d.ts"]
+    }
+  },
   "exports": {
     ".": {
       "types": "./dist/web.d.ts",
       "node": "./dist/node.js",
       "default": "./dist/web.js"
     },
-    "./core": "./dist/core.js",
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "default": "./dist/core.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "module",
@@ -40,5 +49,9 @@
     "elliptic": "^6.5.4",
     "pvtsutils": "^1.2.2"
   },
-  "files": ["dist", "package.json", "src"]
+  "files": [
+    "dist",
+    "package.json",
+    "src"
+  ]
 }
