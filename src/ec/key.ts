@@ -1,6 +1,7 @@
-import { type Name, usageToFlag, createKeyMaterial, KeyMaterial, KeyUsages } from '../key.js'
+import { type Name, usageToFlag, createKeyMaterial, KeyMaterial, KeyUsages, usageFromFlag } from '../key.js'
 import __ from 'elliptic'
 import { combine, Convert } from 'pvtsutils'
+import { hex2buffer } from '../helper.js'
 
 const k256 = new __.ec('secp256k1')
 /** @internal */
@@ -82,8 +83,34 @@ function importK256JWK(
 
     return createKeyMaterial(ecKey, d ? 'private' : 'public', name, usage, extractable)
 }
-// TODO:
 function exportK256JWK(key: KeyMaterial): JsonWebKey {
     if (!key.extractable) throw new DOMException('key is not extractable', 'InvalidAccessError')
-    throw new TypeError('Not implemented')
+    // ignore first '04'
+    const hexPub = key.key.getPublic('hex').slice(2)
+    const hexX = hexPub.slice(0, hexPub.length / 2)
+    const hexY = hexPub.slice(hexPub.length / 2, hexPub.length)
+    if (key.type === 'public') {
+        // public
+
+        const jwk: JsonWebKey = {
+            crv: 'K-256',
+            ext: true,
+            x: Convert.ToBase64Url(hex2buffer(hexX)),
+            y: Convert.ToBase64Url(hex2buffer(hexY)),
+            key_ops: usageFromFlag(key),
+            kty: 'EC',
+        }
+        return jwk
+    } else {
+        const jwk: JsonWebKey = {
+            crv: 'K-256',
+            ext: true,
+            d: Convert.ToBase64Url(hex2buffer(key.key.getPrivate('hex'))),
+            x: Convert.ToBase64Url(hex2buffer(hexX)),
+            y: Convert.ToBase64Url(hex2buffer(hexY)),
+            key_ops: usageFromFlag(key),
+            kty: 'EC',
+        }
+        return jwk
+    }
 }
