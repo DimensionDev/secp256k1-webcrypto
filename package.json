@@ -8,7 +8,7 @@
       "node": "./dist/node.js",
       "default": "./dist/web.js"
     },
-    "./core": "./lib/core.js",
+    "./core": "./dist/core.js",
     "./package.json": "./package.json"
   },
   "type": "module",
