@@ -45,7 +45,8 @@ export function b2a(buffer: ArrayBuffer | ArrayBufferView) {
     return res
 }
 
-function concat(...buf: Uint8Array[]) {
+/** @internal */
+export function concat(...buf: Uint8Array[]) {
     const res = new Uint8Array(buf.map((item) => item.length).reduce((prev, cur) => prev + cur))
     let offset = 0
     buf.forEach((item, index) => {

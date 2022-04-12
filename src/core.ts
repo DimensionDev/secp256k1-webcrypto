@@ -4,6 +4,7 @@ import { signK256, verifyK256 } from './ec/sign.js'
 import { getHashAlg, isK256Alg } from './helper.js'
 import { exportK256, generateK256Pair, importK256 } from './ec/key.js'
 import { usageToFlag } from './key.js'
+import { deriveBitsK256 } from './ec/derive.js'
 
 export function createSubtle(
     nativeSubtle: SubtleCrypto,
@@ -46,6 +47,10 @@ export function createSubtle(
         //#endregion
         //#region Derive
         async deriveBits(algorithm, baseKey, length) {
+            if (isK256Alg(algorithm, 'ECDH')) {
+                return deriveBitsK256(get((algorithm as EcdhKeyDeriveParams).public), get(baseKey), length)
+            }
+
             return nativeSubtle.deriveBits(algorithm, baseKey, length)
         },
         async deriveKey(algorithm, baseKey, derivedKeyType, extractable, keyUsages) {
@@ -54,8 +59,7 @@ export function createSubtle(
         //#endregion
         //#region Sign & Verify
         async sign(algorithm, key, data) {
-            const k256Name = isK256Alg(algorithm, 'ECDSA')
-            if (k256Name) {
+            if (isK256Alg(algorithm, 'ECDSA')) {
                 if (!has(key)) {
                     throw new TypeError(
                         `Failed to execute 'sign' on 'SubtleCrypto': parameter 2 is not of type 'CryptoKey'.`,
@@ -74,8 +78,7 @@ export function createSubtle(
             return nativeSubtle.sign(algorithm, key, data)
         },
         async verify(algorithm, key, signature, data) {
-            const k256Name = isK256Alg(algorithm, 'ECDSA')
-            if (k256Name) {
+            if (isK256Alg(algorithm, 'ECDSA')) {
                 if (!has(key))
                     throw new TypeError(
                         `Failed to execute 'verify' on 'SubtleCrypto': parameter 2 is not of type 'CryptoKey'.`,
