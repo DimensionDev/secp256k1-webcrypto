@@ -37,12 +37,14 @@ function createSubtleClass(
     DOMException: typeof globalThis.DOMException,
 ) {
     const nativeSubtle = nativeCrypto.subtle
-    const { get, has, ShimCryptoKey, newKey } = createMemory(nativeCryptoKey)
+    const { get, has, CryptoKey, newKey } = createMemory(nativeCryptoKey)
 
-    function SubtleCrypto(): SubtleCrypto {
-        throw new TypeError('Illegal constructor')
+    class SubtleCrypto {
+        constructor() {
+            throw new TypeError('Illegal constructor')
+        }
     }
-    const subtleCryptoPrototype: SubtleCrypto = {
+    const subtleCryptoPrototype: globalThis.SubtleCrypto = {
         //#region Not Wrapping methods
         decrypt(algorithm, key, data) {
             return nativeSubtle.decrypt(algorithm, key, data)
@@ -166,31 +168,28 @@ function createSubtleClass(
         },
         //#endregion
     }
-    Object.defineProperty(SubtleCrypto, 'prototype', { value: subtleCryptoPrototype })
-    Object.defineProperties(subtleCryptoPrototype, {
-        constructor: { value: SubtleCrypto, configurable: true, writable: true },
-        [Symbol.toStringTag]: { configurable: true, value: 'Crypto' },
-    })
+    Object.defineProperty(subtleCryptoPrototype, Symbol.toStringTag, { configurable: true, value: 'SubtleCrypto' })
+    Object.defineProperties(SubtleCrypto.prototype, Object.getOwnPropertyDescriptors(subtleCryptoPrototype))
 
-    return [Object.create(subtleCryptoPrototype) as SubtleCrypto, SubtleCrypto as any, ShimCryptoKey] as const
+    return [Object.create(subtleCryptoPrototype) as globalThis.SubtleCrypto, SubtleCrypto as any, CryptoKey] as const
 }
 
 function createCryptoClass(nativeCrypto: Crypto, shimSubtle: SubtleCrypto) {
-    function Crypto(): Crypto {
-        throw new TypeError('Illegal constructor')
+    class Crypto {
+        constructor() {
+            throw new TypeError('Illegal constructor')
+        }
     }
-    const cryptoPrototype: Crypto = {
+
+    const cryptoPrototype: globalThis.Crypto = {
         get subtle() {
             return shimSubtle
         },
         getRandomValues: (array) => nativeCrypto.getRandomValues(array),
         randomUUID: () => nativeCrypto.randomUUID(),
     }
-    Object.defineProperty(Crypto, 'prototype', { value: cryptoPrototype })
-    Object.defineProperty(Crypto.prototype, Symbol.toStringTag, {
-        configurable: true,
-        value: 'Crypto',
-    })
+    Object.defineProperty(cryptoPrototype, Symbol.toStringTag, { configurable: true, value: 'Crypto' })
+    Object.defineProperties(Crypto.prototype, Object.getOwnPropertyDescriptors(cryptoPrototype))
 
-    return [Object.create(Crypto) as Crypto, Crypto as any] as const
+    return [Object.create(cryptoPrototype) as globalThis.Crypto, Crypto as any] as const
 }

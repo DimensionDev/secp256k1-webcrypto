@@ -7,7 +7,7 @@ export function createMemory(nativeCryptoKey: typeof globalThis.CryptoKey | unde
         : undefined
 
     const shimKeys = new WeakMap<object, KeyMaterial>()
-    class ShimCryptoKey implements CryptoKey {
+    class CryptoKey implements globalThis.CryptoKey {
         constructor() {
             throw new TypeError('Illegal constructor')
         }
@@ -16,7 +16,7 @@ export function createMemory(nativeCryptoKey: typeof globalThis.CryptoKey | unde
             if (isNativeCryptoKey(instance)) return true
             return false
         }
-        get algorithm(): CryptoKey['algorithm'] {
+        get algorithm(): globalThis.CryptoKey['algorithm'] {
             const { name } = get(this)
             return { name, namedCurve: 'K-256' } as EcKeyAlgorithm
         }
@@ -30,6 +30,7 @@ export function createMemory(nativeCryptoKey: typeof globalThis.CryptoKey | unde
             return usageFromFlag(get(this))
         }
     }
+    Object.defineProperty(CryptoKey, Symbol.toStringTag, { configurable: true, value: 'CryptoKey' })
     function has(object: any) {
         return shimKeys.has(object)
     }
@@ -46,10 +47,10 @@ export function createMemory(nativeCryptoKey: typeof globalThis.CryptoKey | unde
             return false
         }
     }
-    function newKey(material: KeyMaterial): ShimCryptoKey {
-        const key = Object.create(ShimCryptoKey.prototype)
+    function newKey(material: KeyMaterial): CryptoKey {
+        const key = Object.create(CryptoKey.prototype)
         shimKeys.set(key, material)
         return key
     }
-    return { has, get, ShimCryptoKey, newKey }
+    return { has, get, CryptoKey, newKey }
 }
