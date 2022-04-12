@@ -1,0 +1,19 @@
+name: Build
+
+on: [push]
+
+jobs:
+    build:
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v2
+            - uses: pnpm/action-setup@v2.1.0
+            - name: Authenticate NPM
+              uses: DimensionDev/github-token-action@latest
+              with:
+                  registry: true
+            - run: pnpm install
+            - run: pnpm run build
+            - name: Publish to GitHub Package (unstable)
+              run: ./publish.sh

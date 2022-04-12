@@ -1,5 +1,6 @@
 {
   "name": "@dimensiondev/secp256k1-webcrypto",
+  "packageManager": "pnpm@6.32.6",
   "version": "1.0.0",
   "description": "WebCrypto API with secp256k1 support",
   "main": "dist/web.js",
@@ -32,13 +33,10 @@
   "homepage": "https://github.com/DimensionDev/secp256k1-webcrypto#readme",
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
-    "elliptic": "^6.5.4",
     "typescript": "^4.7.0-dev.20220406"
   },
-  "peerDependencies": {
-    "elliptic": "^6.5.4"
-  },
   "dependencies": {
+    "elliptic": "^6.5.4",
     "pvtsutils": "^1.2.2"
   }
 }
