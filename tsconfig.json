@@ -43,7 +43,7 @@
 
     // Language and Environment
     "lib": ["ES2021", "DOM"],
-    "target": "ES6",
+    "target": "ES2018",
     "useDefineForClassFields": true,
 
     // Projects

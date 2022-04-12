@@ -1,4 +1,3 @@
-import { createSubtle } from "./core.js";
+import { createSubtle } from './core.js'
 
-export const subtleCrypto = createSubtle(crypto.subtle, DOMException)
-export { ShimCryptoKey } from './core.js'
+export const [ShimCryptoKey, subtleCrypto] = createSubtle(crypto.subtle, CryptoKey, DOMException)
