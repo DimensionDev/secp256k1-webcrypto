@@ -54,6 +54,13 @@ export function createSubtle(
             return nativeSubtle.deriveBits(algorithm, baseKey, length)
         },
         async deriveKey(algorithm, baseKey, derivedKeyType, extractable, keyUsages) {
+            if (isK256Alg(algorithm, 'ECDH')) {
+                const alg = algorithm as EcdhKeyDeriveParams
+                const aes = derivedKeyType as AesDerivedKeyParams
+
+                const bits = deriveBitsK256(get(alg.public), get(baseKey), aes.length)
+                return nativeSubtle.importKey('raw', bits, derivedKeyType, extractable, keyUsages)
+            }
             return nativeSubtle.deriveKey(algorithm, baseKey, derivedKeyType, extractable, keyUsages)
         },
         //#endregion
