@@ -78,14 +78,14 @@ function createSubtleClass(
         //#endregion
         //#region Derive
         async deriveBits(algorithm, baseKey, length) {
-            if (isK256Alg(algorithm, 'ECDH')) {
+            if (has(baseKey)) {
                 return deriveBitsK256(get((algorithm as EcdhKeyDeriveParams).public), get(baseKey), length)
             }
 
             return nativeSubtle.deriveBits(algorithm, baseKey, length)
         },
         async deriveKey(algorithm, baseKey, derivedKeyType, extractable, keyUsages) {
-            if (isK256Alg(algorithm, 'ECDH')) {
+            if (has(baseKey)) {
                 const alg = algorithm as EcdhKeyDeriveParams
                 const aes = derivedKeyType as AesDerivedKeyParams
 
