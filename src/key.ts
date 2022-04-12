@@ -63,9 +63,9 @@ export function usageToFlag(name: Name, usageList: readonly KeyUsage[], DOMExcep
     if (flag === KeyUsages.None) {
         throw new DOMException('Usages cannot be empty when creating a key.', 'SyntaxError')
     }
-    if (name === 'ECDSA' && flag !== (KeyUsages.sign | KeyUsages.verify)) {
-        throw new DOMException('Cannot create a key using the specified key usages.', 'SyntaxError')
-    }
+    // if (name === 'ECDSA' && flag !== (KeyUsages.sign | KeyUsages.verify)) {
+    //     throw new DOMException('Cannot create a key using the specified key usages.', 'SyntaxError')
+    // }
     return flag
 }
 /** @internal */

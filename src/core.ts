@@ -66,12 +66,7 @@ export function createSubtle(
         //#endregion
         //#region Sign & Verify
         async sign(algorithm, key, data) {
-            if (isK256Alg(algorithm, 'ECDSA')) {
-                if (!has(key)) {
-                    throw new TypeError(
-                        `Failed to execute 'sign' on 'SubtleCrypto': parameter 2 is not of type 'CryptoKey'.`,
-                    )
-                }
+            if (has(key)) {
                 const hash = getHashAlg(algorithm)
                 if (!hash) {
                     throw new DOMException(
@@ -85,12 +80,7 @@ export function createSubtle(
             return nativeSubtle.sign(algorithm, key, data)
         },
         async verify(algorithm, key, signature, data) {
-            if (isK256Alg(algorithm, 'ECDSA')) {
-                if (!has(key))
-                    throw new TypeError(
-                        `Failed to execute 'verify' on 'SubtleCrypto': parameter 2 is not of type 'CryptoKey'.`,
-                    )
-
+            if (has(key)) {
                 const hash = getHashAlg(algorithm)
                 if (!hash)
                     throw new DOMException(

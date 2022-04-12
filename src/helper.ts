@@ -22,9 +22,7 @@ export function isK256Alg(alg: unknown, acceptKind: 'ECDH' | 'ECDSA' | 'any'): N
 /** @internal */
 export function getHashAlg(alg: unknown): Hash | undefined {
     try {
-        if (typeof alg !== 'object') return
-        if (alg === null) return
-        const { name } = alg as EcKeyAlgorithm
+        const { name } = (alg as any).hash
         if (name === 'SHA-256') return name
         if (name === 'SHA-384') return name
         if (name === 'SHA-512') return name
@@ -46,7 +44,7 @@ export function b2a(buffer: ArrayBuffer | ArrayBufferView) {
 }
 
 /** @internal */
-export function concat(...buf: Uint8Array[]) {
+export function concat(...buf: (Uint8Array | number[])[]) {
     const res = new Uint8Array(buf.map((item) => item.length).reduce((prev, cur) => prev + cur))
     let offset = 0
     buf.forEach((item, index) => {

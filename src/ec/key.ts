@@ -1,7 +1,7 @@
 import { type Name, usageToFlag, createKeyMaterial, KeyMaterial, KeyUsages, usageFromFlag } from '../key.js'
 import __ from 'elliptic'
-import { combine, Convert } from 'pvtsutils'
-import { hex2buffer } from '../helper.js'
+import { Convert } from 'pvtsutils'
+import { concat, hex2buffer } from '../helper.js'
 
 const k256 = new __.ec('secp256k1')
 /** @internal */
@@ -32,8 +32,8 @@ export function generateK256Pair(
     const key = k256.genKeyPair()
 
     return {
-        priv: createKeyMaterial(key, 'public', name, usage, extractable),
-        pub: createKeyMaterial(key, 'private', name, usage, extractable),
+        pub: createKeyMaterial(key, 'public', name, usage, extractable),
+        priv: createKeyMaterial(key, 'private', name, usage, extractable),
     }
 }
 
@@ -62,8 +62,6 @@ function importK256JWK(
     if (!y) throw new DOMException(`The required JWK member "y" was missing`, 'DataError')
 
     let isValidKeyUsage = true
-    if (usage & KeyUsages.deriveBits) if (!key_ops.includes('deriveBits')) isValidKeyUsage = false
-    if (usage & KeyUsages.deriveKey) if (!key_ops.includes('deriveKey')) isValidKeyUsage = false
     if (usage & KeyUsages.sign) if (!key_ops.includes('sign')) isValidKeyUsage = false
     if (usage & KeyUsages.verify) if (!key_ops.includes('verify')) isValidKeyUsage = false
 
@@ -74,12 +72,13 @@ function importK256JWK(
         )
     //#endregion
 
-    const point = combine(Convert.FromBase64Url(x), Convert.FromBase64Url(y))
+    // 4 is the point format.
+    const point = concat([4], new Uint8Array(Convert.FromBase64Url(x)), new Uint8Array(Convert.FromBase64Url(y)))
     const priv = d ? Convert.FromBase64Url(d) : undefined
 
     let ecKey: __.ec.KeyPair
     if (priv) ecKey = k256.keyFromPrivate(new Uint8Array(priv))
-    else ecKey = k256.keyFromPublic(new Uint8Array(point))
+    else ecKey = k256.keyFromPublic(point)
 
     return createKeyMaterial(ecKey, d ? 'private' : 'public', name, usage, extractable)
 }
