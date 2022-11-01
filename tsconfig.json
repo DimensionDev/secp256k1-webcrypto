@@ -1,56 +1,56 @@
 {
-  "include": ["./src/"],
-  "compilerOptions": {
-    "rootDir": "./src/",
-    "outDir": "./dist/",
-    // Classification follows https://www.typescriptlang.org/tsconfig
+    "include": ["./src/"],
+    "compilerOptions": {
+        "rootDir": "./src/",
+        "outDir": "./dist/",
+        // Classification follows https://www.typescriptlang.org/tsconfig
 
-    // Type Checking
-    "strict": true,
-    // exactOptionalPropertyTypes: false,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    // noPropertyAccessFromIndexSignature: false,
-    // noUncheckedIndexedAccess: false,
-    // noUnusedLocals: false,
-    // noUnusedParameters: false,
-    "useUnknownInCatchVariables": true,
-    "preserveConstEnums": false,
+        // Type Checking
+        "strict": true,
+        // exactOptionalPropertyTypes: false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        // noPropertyAccessFromIndexSignature: false,
+        // noUncheckedIndexedAccess: false,
+        // noUnusedLocals: false,
+        // noUnusedParameters: false,
+        "useUnknownInCatchVariables": true,
+        "preserveConstEnums": false,
 
-    // Modules
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+        // Modules
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
 
-    // Emit
-    "declaration": true,
-    "declarationMap": true,
-    "importsNotUsedAsValues": "error",
-    "noEmitOnError": true,
-    "preserveValueImports": true,
-    "sourceMap": true,
-    "stripInternal": true, // skip type emit for @internal types
+        // Emit
+        "declaration": true,
+        "declarationMap": true,
+        "importsNotUsedAsValues": "error",
+        "noEmitOnError": true,
+        "preserveValueImports": true,
+        "sourceMap": true,
+        "stripInternal": true, // skip type emit for @internal types
 
-    // JavaScript Support
-    "allowJs": true,
-    "checkJs": false,
+        // JavaScript Support
+        "allowJs": true,
+        "checkJs": false,
 
-    // Interop Constraints
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+        // Interop Constraints
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
 
-    // Language and Environment
-    "lib": ["ES2021", "DOM"],
-    "target": "ES2018",
-    "useDefineForClassFields": true,
+        // Language and Environment
+        "lib": ["ES2021", "DOM"],
+        "target": "ES2018",
+        "useDefineForClassFields": true,
 
-    // Projects
-    // "composite": true,
-    // "incremental": true,
+        // Projects
+        // "composite": true,
+        // "incremental": true,
 
-    // Completeness
-    "skipLibCheck": true // skip all type checks for .d.ts files
-  }
+        // Completeness
+        "skipLibCheck": true // skip all type checks for .d.ts files
+    }
 }
