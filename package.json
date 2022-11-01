@@ -1,7 +1,7 @@
 {
   "name": "@masknet/secp256k1-webcrypto",
   "packageManager": "pnpm@7.14.1",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "WebCrypto API with secp256k1 support",
   "main": "./dist/web.js",
   "types": "./dist/web.d.ts",
