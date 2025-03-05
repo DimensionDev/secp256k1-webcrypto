@@ -10,12 +10,12 @@ jobs:
     prettier:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-            - run: npx prettier@2.7.1 --check ./src
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+            - run: npx prettier@3.5.3 --check ./src
     anti-trojan-source:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
             - run: npx anti-trojan-source --files='src/**/*.ts'

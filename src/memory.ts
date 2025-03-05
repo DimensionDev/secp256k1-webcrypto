@@ -1,4 +1,4 @@
-import { KeyMaterial, usageFromFlag } from './key.js'
+import { type KeyMaterial, usageFromFlag } from './key.js'
 
 /** @internal */
 export function createMemory(nativeCryptoKey: typeof globalThis.CryptoKey | undefined) {

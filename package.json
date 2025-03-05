@@ -1,6 +1,6 @@
 {
   "name": "@masknet/secp256k1-webcrypto",
-  "packageManager": "pnpm@7.14.1",
+  "packageManager": "pnpm@10.0.0",
   "version": "1.0.0",
   "description": "WebCrypto API with secp256k1 support",
   "main": "./dist/web.js",
@@ -59,14 +59,14 @@
   },
   "homepage": "https://github.com/DimensionDev/secp256k1-webcrypto#readme",
   "devDependencies": {
-    "@changesets/cli": "^2.25.1",
-    "@types/elliptic": "^6.4.14",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.4"
+    "@changesets/cli": "^2.28.1",
+    "@types/elliptic": "^6.4.18",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "elliptic": "^6.5.4",
-    "pvtsutils": "^1.3.2"
+    "elliptic": "^6.6.1",
+    "pvtsutils": "^1.3.6"
   },
   "files": [
     "dist",

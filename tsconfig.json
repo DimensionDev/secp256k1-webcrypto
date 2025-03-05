@@ -18,7 +18,6 @@
         // noUnusedLocals: false,
         // noUnusedParameters: false,
         "useUnknownInCatchVariables": true,
-        "preserveConstEnums": false,
 
         // Modules
         "module": "NodeNext",
@@ -27,9 +26,8 @@
         // Emit
         "declaration": true,
         "declarationMap": true,
-        "importsNotUsedAsValues": "error",
+        "verbatimModuleSyntax": true,
         "noEmitOnError": true,
-        "preserveValueImports": true,
         "sourceMap": true,
         "stripInternal": true, // skip type emit for @internal types
 

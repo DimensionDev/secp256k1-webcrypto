@@ -1,4 +1,4 @@
-import { type Name, usageToFlag, createKeyMaterial, KeyMaterial, KeyUsages, usageFromFlag } from '../key.js'
+import { type Name, usageToFlag, createKeyMaterial, type KeyMaterial, KeyUsages, usageFromFlag } from '../key.js'
 import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
 import { concat, hex2buffer } from '../helper.js'

@@ -79,6 +79,8 @@ function createSubtleClass(
         //#region Derive
         async deriveBits(algorithm, baseKey, length) {
             if (has(baseKey)) {
+                // https://github.com/w3c/webcrypto/issues/322
+                if (!length) length = 0
                 return deriveBitsK256(get((algorithm as EcdhKeyDeriveParams).public), get(baseKey), length)
             }
 
